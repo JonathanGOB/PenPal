@@ -11,13 +11,16 @@ class User extends Authenticatable
 {
     use HasApiTokens, Notifiable;
 
+    const ADMIN = 1;
+    const REGULAR_USER = 0;
+    
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 'occupation_id', 'nationality_id', 'country_id'
     ];
 
     /**
@@ -38,5 +41,24 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function avatar(){
+        return $this->morphOne('Image', 'imageable');
+    }
+
+    public function friendslist(){
+        return $this->hasOne(Friend::class);
+    }
+
+    public function nationality(){
+        return $this->hasOne(Nationality::class);
+    }
+
+    public function country(){
+        return $this->hasOne(Country::class);
+    }
+
+    public function occupation(){
+        return $this->hasOne(Occupation::class);
+    }
 
 }

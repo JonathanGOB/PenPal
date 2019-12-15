@@ -25,8 +25,9 @@ class AuthController extends Controller
             'password' => bcrypt($request->password)
         ]);
         $user->save();
+
         return response()->json([
-            'message' => 'Successfully created user!'
+            'message' => __('auth.signup_success')
         ], 201);
     }
 
@@ -61,5 +62,19 @@ class AuthController extends Controller
             )->toDateTimeString()
         ]);
 
+    }
+
+    public function logout(Request $request)
+    {
+        $request->user()->token()->revoke();
+        return response()->json([
+            'message' => __('auth.logout_success')
+        ]);
+    }
+
+
+    public function user(Request $request)
+    {
+        return response()->json($request->user());
     }
 }
