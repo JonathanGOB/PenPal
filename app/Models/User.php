@@ -6,6 +6,7 @@ use Laravel\Passport\HasApiTokens;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use function GuzzleHttp\Psr7\str;
 
 class User extends Authenticatable
 {
@@ -13,7 +14,7 @@ class User extends Authenticatable
 
     const ADMIN = 1;
     const REGULAR_USER = 0;
-    
+
     /**
      * The attributes that are mass assignable.
      *
@@ -39,7 +40,17 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'role' => 'boolean'
     ];
+
+
+    public function setEmailAttribute($value){
+        $this->attributes['email'] = strtolower($value);
+    }
+
+    public function getEmailAttribute($value){
+        return strtolower($value);
+    }
 
     public function avatar(){
         return $this->morphOne('Image', 'imageable');

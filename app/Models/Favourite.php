@@ -15,6 +15,10 @@ class Favourite extends Model
         'favourite'
     ];
 
+    public function picture(){
+        return $this->morphOne('Image', 'imageable');
+    }
+
     public function favouriteable(){
         return $this->morphTo();
     }

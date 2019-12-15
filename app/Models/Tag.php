@@ -15,6 +15,10 @@ class Tag extends Model
         'tag'
     ];
 
+    public function picture(){
+        return $this->morphOne('Image', 'imageable');
+    }
+
     public function users(){
         return $this->hasMany(User::class);
     }
