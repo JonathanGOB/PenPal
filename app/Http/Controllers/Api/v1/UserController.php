@@ -9,7 +9,17 @@ use Illuminate\Http\Request;
 class UserController extends Controller
 {
     public function index(){
-        $users = User::simplePaginate(10);
+        $users = User::simplePaginate(10)->each((function($row){
+            $row->setHidden(['email', 'email_verified_at', 'role', 'password', 'remember_token']);
+        }));
         return response()->json(['users' => $users]);
     }
+
+    public function show($userId){
+        $user = User::where('id', $userId)->first();
+        $user = $user->makeHidden(['email', 'email_verified_at', 'role', 'password', 'remember_token']);
+        return response()->json(['user' => $user]);
+    }
+
+
 }

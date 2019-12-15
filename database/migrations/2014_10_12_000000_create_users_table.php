@@ -19,7 +19,7 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->unsignedBigInteger('Role')->default(\App\Models\User::REGULAR_USER);
+            $table->unsignedBigInteger('role')->default(\App\Models\User::REGULAR_USER);
             $table->unsignedBigInteger('country_id')->nullable();
             $table->unsignedBigInteger('occupation_id')->nullable();
             $table->unsignedBigInteger('nationality_id')->nullable();
