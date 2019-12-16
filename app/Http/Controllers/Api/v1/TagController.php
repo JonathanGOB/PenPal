@@ -10,16 +10,29 @@ use Illuminate\Support\Facades\Auth;
 
 class TagController extends Controller
 {
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function index(){
         $tags = Tag::all();
         return response()->json(['tags' => $tags], 200);
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
     public function create(Request $request){
         $this->authorizeForUser($request->user('api'),'create', Tag::class);
         return response()->json(['tags' => ''], 200);
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
     public function store(Request $request){
         $this->authorizeForUser($request->user('api'),'store', Tag::class);
         $request->validate([
@@ -35,15 +48,31 @@ class TagController extends Controller
         return response()->json(['message' =>'tag.creation_success', 'tags' => $tag], 201);
     }
 
+    /**
+     * @param Tag $tag
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function show(Tag $tag){
         return response()->json(['user' => $tag]);
     }
 
+    /**
+     * @param Request $request
+     * @param Tag $tag
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
     public function edit(Request $request, Tag $tag){
         $this->authorizeForUser($request->user('api'),'update', Tag::class);
         return response()->json(['tags' => ''], 200);
     }
 
+    /**
+     * @param Request $request
+     * @param Tag $tag
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
     public function update(Request $request, Tag $tag){
         $this->authorizeForUser($request->user('api'),'update', Tag::class);
         $request->validate([
@@ -56,6 +85,12 @@ class TagController extends Controller
         return response()->json(['message' => 'tag.update_success', 'tag' => $tag], 200);
     }
 
+    /**
+     * @param Request $request
+     * @param Tag $tag
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
     public function delete(Request $request, Tag $tag){
         $this->authorizeForUser($request->user('api'),'delete', Tag::class);
 
