@@ -12,6 +12,10 @@ use Illuminate\Support\Facades\Auth;
 class AuthController extends Controller
 {
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function register(Request $request)
     {
         $request->validate([
@@ -35,6 +39,10 @@ class AuthController extends Controller
         ], 201);
     }
 
+    /**
+     * @param $token
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function signupActivate($token)
     {
         $user = User::where('activation_token', $token)->first();
@@ -49,6 +57,10 @@ class AuthController extends Controller
         return $user;
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function authenticate(Request $request){
 
         $request->validate([
@@ -87,6 +99,10 @@ class AuthController extends Controller
 
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function logout(Request $request)
     {
         $request->user()->token()->revoke();
@@ -96,6 +112,10 @@ class AuthController extends Controller
     }
 
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function user(Request $request)
     {
         return response()->json($request->user());

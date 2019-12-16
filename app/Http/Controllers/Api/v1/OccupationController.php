@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\v1;
 use App\Http\Controllers\Controller;
 use App\Models\Occupation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Schema;
 
 class OccupationController extends Controller
 {
@@ -28,7 +29,7 @@ class OccupationController extends Controller
     public function create(Request $request)
     {
         $this->authorizeForUser($request->user('api'),'create', Occupation::class);
-        return response()->json(['occupations' => ''], 200);
+        return response()->json(['schema' => 'occupations', 'columns' => ['occupation']], 200);
     }
 
     /**
@@ -51,7 +52,7 @@ class OccupationController extends Controller
 
         $occupation->save();
 
-        return response()->json(['message' =>'occupation.creation_success', 'occupations' => $occupation], 201);
+        return response()->json(['message' =>'occupation.creation_success', 'occupation' => $occupation], 201);
     }
 
     /**
@@ -74,8 +75,9 @@ class OccupationController extends Controller
      */
     public function edit(Request $request, Occupation $occupation)
     {
-        $this->authorizeForUser($request->user('api'),'update', Occupation::class);
-        return response()->json(['occupations' => ''], 200);
+        $this->authorizeForUser($request->user('api'),'create', Occupation::class);
+        $columns = Schema::getColumnListing('occupations');
+        return response()->json(['schema' => 'occupations', 'columns' => $columns], 200);
     }
 
     /**

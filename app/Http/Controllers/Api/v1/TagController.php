@@ -25,7 +25,7 @@ class TagController extends Controller
      */
     public function create(Request $request){
         $this->authorizeForUser($request->user('api'),'create', Tag::class);
-        return response()->json(['tags' => ''], 200);
+        return response()->json(['schema' => 'tags', 'columns' => ['tag']], 200);
     }
 
     /**
@@ -48,7 +48,7 @@ class TagController extends Controller
         return response()->json(['message' =>'tag.creation_success', 'tags' => $tag], 201);
     }
 
-    /**
+    /** 
      * @param Tag $tag
      * @return \Illuminate\Http\JsonResponse
      */
@@ -63,8 +63,9 @@ class TagController extends Controller
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function edit(Request $request, Tag $tag){
-        $this->authorizeForUser($request->user('api'),'update', Tag::class);
-        return response()->json(['tags' => ''], 200);
+        $this->authorizeForUser($request->user('api'),'create', Tag::class);
+        $columns = Schema::getColumnListing('tags');
+        return response()->json(['schema' => 'tags', 'columns' => $columns], 200);
     }
 
     /**

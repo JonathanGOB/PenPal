@@ -52,6 +52,9 @@ class TagPolicy
 
     }
 
+    /**
+     * @param User $user
+     */
     public function store(User $user)
     {
 
