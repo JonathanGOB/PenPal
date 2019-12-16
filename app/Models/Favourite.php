@@ -12,7 +12,7 @@ class Favourite extends Model
      * @var array
      */
     protected $fillable = [
-        'favourite'
+        'favourite', 'favouriteable_id', 'favouriteable_type'
     ];
 
     public function picture(){

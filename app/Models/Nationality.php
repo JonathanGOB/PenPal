@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Nationality extends Model
 {
@@ -15,6 +16,9 @@ class Nationality extends Model
         'nationality'
     ];
 
+    /**
+     * @return HasMany
+     */
     public function users(){
         return $this->hasMany(User::class);
     }

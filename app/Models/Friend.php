@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Friend extends Model
 {
@@ -12,9 +13,12 @@ class Friend extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id'
+        'user_id', 'friends_list'
     ];
 
+    /**
+     * @return HasOne
+     */
     public function user(){
         return $this->hasOne(User::class);
     }

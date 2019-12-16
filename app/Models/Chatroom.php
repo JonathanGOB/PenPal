@@ -12,7 +12,7 @@ class Chatroom extends Model
      * @var array
      */
     protected $fillable = [
-        'chatroom_id'
+        'chatroom_id', 'joinchat', 'private', 'owner_id', 'allow_people_id', 'roles'
     ];
 
     public function grouppicture(){

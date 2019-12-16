@@ -5,21 +5,26 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
-class Comment extends Model
+class Event extends Model
 {
     /**
-     * The attributes that are mass assignable.
-     *
      * @var array
      */
     protected $fillable = [
-        'comment'
+        'seen', 'type', 'observable_id', 'observable_type', 'eventable_id', 'eventable_type'
     ];
 
     /**
      * @return MorphTo
      */
-    public function commentable(){
+    public function observable(){
+        return $this->morphTo();
+    }
+
+    /**
+     * @return MorphTo
+     */
+    public function eventable(){
         return $this->morphTo();
     }
 }
