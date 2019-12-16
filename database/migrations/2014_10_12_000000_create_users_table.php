@@ -19,6 +19,8 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->boolean('active')->default(false);
+            $table->string('activation_token');
             $table->unsignedBigInteger('role')->default(\App\Models\User::REGULAR_USER);
             $table->unsignedBigInteger('country_id')->nullable();
             $table->unsignedBigInteger('occupation_id')->nullable();
@@ -28,6 +30,8 @@ class CreateUsersTable extends Migration
             $table->foreign('nationality_id')->references('id')->on('nationalities')->onDelete('set null');
             $table->rememberToken();
             $table->timestamps();
+            $table->softDeletes();
+
         });
     }
 

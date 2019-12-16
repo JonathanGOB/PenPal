@@ -16,7 +16,9 @@ class AuthController extends Controller
         $request->validate([
             'name' => 'required|string',
             'email' => 'required|string|email|unique:users',
-            'password' => 'required|string|confirmed'
+            'password' => 'required|string|confirmed',
+            'activation_token' => str_random(60)
+
         ]);
 
         $user = new User([
@@ -25,10 +27,25 @@ class AuthController extends Controller
             'password' => bcrypt($request->password)
         ]);
         $user->save();
+        $user->notify(new SignupActivate($user));
 
         return response()->json([
             'message' => __('auth.signup_success')
         ], 201);
+    }
+
+    public function signupActivate($token)
+    {
+        $user = User::where('activation_token', $token)->first();
+        if (!$user) {
+            return response()->json([
+                'message' => 'This activation token is invalid.'
+            ], 404);
+        }
+        $user->active = true;
+        $user->activation_token = '';
+        $user->save();
+        return $user;
     }
 
     public function authenticate(Request $request){
@@ -40,12 +57,20 @@ class AuthController extends Controller
         ]);
 
         $credentials = request(['email', 'password']);
+
         if (!Auth::attempt($credentials))
             return response()->json([
                 'message' => 'Unauthorized'
             ], 401);
 
         $user = $request->user();
+
+        if (!$user->active) {
+            return response()->json([
+                'message' => 'email not activated yet'
+            ], 401);
+        }
+
         $tokenResult = $user->createToken('Personal Access Token');
         $token = $tokenResult->token;
 
