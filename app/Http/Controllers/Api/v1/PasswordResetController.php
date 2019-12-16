@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Notifications\PasswordResetRequest;
 use App\Notifications\PasswordResetSuccess;
-use App\User;
+use App\Models\User;
 use App\PasswordReset;
 class PasswordResetController extends Controller
 {
@@ -27,6 +27,16 @@ class PasswordResetController extends Controller
             return response()->json([
                 'message' => "We can't find a user with that e-mail address."
             ], 404);
+
+        if ($user->password_reset_total == User::MAX_PASSWORD_RESETS){
+            return response()->json([
+                'message' => "Too many attempts. Try again at 00:00:00 CET."
+            ], 404);
+        }
+
+        $user->increment('password_reset_total');
+        $user->save();
+
         $passwordReset = PasswordReset::updateOrCreate(
             ['email' => $user->email],
             [
