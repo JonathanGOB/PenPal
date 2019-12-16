@@ -12,16 +12,16 @@ class TagController extends Controller
 {
     public function index(){
         $tags = Tag::all();
-        return response()->json(['tags' => $tags]);
+        return response()->json(['tags' => $tags], 200);
     }
 
     public function create(Request $request){
-        abort_unless(Gate::before('create', $request->user()));
-        return response()->json(['tags' => '']);
+        $this->authorizeForUser($request->user('api'),'create', Tag::class);
+        return response()->json(['tags' => ''], 200);
     }
 
-    public function post(Request $request){
-        abort_unless(Gate::before('create', $request->user()));
+    public function store(Request $request){
+        $this->authorizeForUser($request->user('api'),'store', Tag::class);
         $request->validate([
             'tag' => 'required'
         ]);
@@ -35,44 +35,33 @@ class TagController extends Controller
         return response()->json(['message' =>'tag.creation_success', 'tags' => $tag], 201);
     }
 
-    public function show($tagId){
-        $tag = Tag::where('id', $tagId)->first();
+    public function show(Tag $tag){
         return response()->json(['user' => $tag]);
     }
 
-    public function edit(Request $request, $tagId){
-        abort_unless(Gate::before('update', $request->user()));
+    public function edit(Request $request, Tag $tag){
+        $this->authorizeForUser($request->user('api'),'update', Tag::class);
+        return response()->json(['tags' => ''], 200);
+    }
+
+    public function update(Request $request, Tag $tag){
+        $this->authorizeForUser($request->user('api'),'update', Tag::class);
         $request->validate([
             'tag' => 'required'
         ]);
 
-        $tag = Tag::where('id', $tagId)->first();
         $tag->tag = $request->tag;
         $tag->save();
 
-        return response()->json(['message' => 'tag.edit_success', 'tag' => $tag]);
+        return response()->json(['message' => 'tag.update_success', 'tag' => $tag], 200);
     }
 
-    public function update(Request $request, $tagId){
-        abort_unless(Gate::before('update', $request->user()));
-        $request->validate([
-            'tag' => 'required'
-        ]);
+    public function delete(Request $request, Tag $tag){
+        $this->authorizeForUser($request->user('api'),'delete', Tag::class);
 
-        $tag = Tag::where('id', $tagId)->first();
-        $tag->tag = $request->tag;
-        $tag->save();
-
-        return response()->json(['message' => 'tag.update_success', 'tag' => $tag]);
-    }
-
-    public function delete(Request $request, $tagId){
-        abort_unless(Gate::before('update', $request->user()));
-
-        $tag = Tag::where('id', $tagId)->first();
         $tag->delete();
 
-        return response()->json(['message' => 'tag.delete_success', 'tagId' => $tagId]);
+        return response()->json(['message' => 'tag.delete_success', 'tagId' => $tag], 200);
     }
 
 

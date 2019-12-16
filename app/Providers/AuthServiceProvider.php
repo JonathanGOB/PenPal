@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\Occupation;
 use App\Models\Tag;
+use App\Policies\OccupationPolicy;
 use App\Policies\TagPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
@@ -17,7 +19,8 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         'App\Model' => 'App\Policies\ModelPolicy',
-         Tag::class => TagPolicy::class
+         Tag::class => TagPolicy::class,
+         Occupation::class => OccupationPolicy::class
     ];
 
     /**

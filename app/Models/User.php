@@ -44,6 +44,8 @@ class User extends Authenticatable
         'role' => 'boolean'
     ];
 
+    protected $dates = ['deleted_at'];
+
 
     public function setEmailAttribute($value){
         $this->attributes['email'] = strtolower($value);

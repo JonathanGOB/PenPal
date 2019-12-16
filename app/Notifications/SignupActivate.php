@@ -44,6 +44,7 @@ class SignupActivate extends Notification
 
         return (new MailMessage)
             ->subject('Confirm your account')
+            ->greeting('Hello '.$notifiable->name.",")
             ->line('Thanks for signing up on PenPal! Please before you begin, you must confirm your account.')
             ->action('Confirm Account', url($url))
             ->line('Thank you for using our application!');

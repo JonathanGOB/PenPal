@@ -10,12 +10,7 @@ class TagPolicy
 {
     use HandlesAuthorization;
 
-    /**
-     * Determine whether the user can view any tags.
-     *
-     * @param  \App\Models\User  $user
-     * @return mixed
-     */
+
     public function before($user, $ability)
     {
         if ($user->role) {
@@ -23,6 +18,12 @@ class TagPolicy
         }
     }
 
+    /**
+     * Determine whether the user can view any tags.
+     *
+     * @param  \App\Models\User  $user
+     * @return mixed
+     */
     public function viewAny(User $user)
     {
         //
@@ -47,6 +48,11 @@ class TagPolicy
      * @return mixed
      */
     public function create(User $user)
+    {
+
+    }
+
+    public function store(User $user)
     {
 
     }

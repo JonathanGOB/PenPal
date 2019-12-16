@@ -19,7 +19,7 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->integer('password_resets_total');
+            $table->integer('password_resets_total')->default(0);
             $table->boolean('active')->default(false);
             $table->string('activation_token');
             $table->unsignedBigInteger('role')->default(\App\Models\User::REGULAR_USER);
