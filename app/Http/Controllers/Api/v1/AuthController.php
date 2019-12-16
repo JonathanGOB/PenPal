@@ -57,6 +57,9 @@ class AuthController extends Controller
         ]);
 
         $credentials = request(['email', 'password']);
+        $credentials['active'] = 1;
+        $credentials['deleted_at'] = null;
+
 
         if (!Auth::attempt($credentials))
             return response()->json([
@@ -64,12 +67,6 @@ class AuthController extends Controller
             ], 401);
 
         $user = $request->user();
-
-        if (!$user->active) {
-            return response()->json([
-                'message' => 'email not activated yet'
-            ], 401);
-        }
 
         $tokenResult = $user->createToken('Personal Access Token');
         $token = $tokenResult->token;

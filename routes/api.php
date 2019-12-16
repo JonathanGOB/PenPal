@@ -22,3 +22,7 @@ Route::get('v1/auth/logout', 'Api\v1\AuthController@logout')->middleware('auth:a
 Route::get('v1/auth/user', 'Api\v1\AuthController@user')->middleware('auth:api');
 Route::resource('v1/user', 'Api\v1\UserController', ['except' => ['create', 'store', 'edit', 'update', 'destroy']])->middleware('auth:api');
 Route::resource('v1/tag', 'Api\v1\TagController')->middleware('auth:api');
+
+Route::post('v1/auth/create', 'PasswordResetController@create')->middleware('auth:api');
+Route::get('v1/auth/find/{token}', 'PasswordResetController@find')->middleware('auth:api');
+Route::post('v1/auth/reset', 'PasswordResetController@reset')->middleware('auth:api');
