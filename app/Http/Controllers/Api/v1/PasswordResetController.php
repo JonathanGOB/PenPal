@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Notifications\PasswordResetRequest;
@@ -14,8 +15,8 @@ class PasswordResetController extends Controller
     /**
      * Create token password reset
      *
-     * @param  [string] email
-     * @return [string] message
+     * @param Request $request
+     * @return JsonResponse [string] message
      */
     public function create(Request $request)
     {

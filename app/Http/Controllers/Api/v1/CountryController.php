@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
 use App\Models\Country;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Schema;
 
 class CountryController extends Controller
@@ -12,7 +15,7 @@ class CountryController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function index()
     {
@@ -23,8 +26,8 @@ class CountryController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\JsonResponse
-     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @return JsonResponse
+     * @throws AuthorizationException
      */
     public function create(Request $request)
     {
@@ -35,9 +38,9 @@ class CountryController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\JsonResponse
-     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @param Request $request
+     * @return JsonResponse
+     * @throws AuthorizationException
      */
     public function store(Request $request)
     {
@@ -58,20 +61,20 @@ class CountryController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Country  $country
-     * @return \Illuminate\Http\Response
+     * @param Country $country
+     * @return JsonResponse
      */
     public function show(Country $country)
     {
-        response()->json(['country' => $country]);
+        return response()->json(['country' => $country]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param \App\Models\Country $country
-     * @return \Illuminate\Http\JsonResponse
-     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @param Country $country
+     * @return JsonResponse
+     * @throws AuthorizationException
      */
     public function edit(Request $request, Country $country)
     {
@@ -83,10 +86,10 @@ class CountryController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\Country $country
-     * @return \Illuminate\Http\JsonResponse
-     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @param Request $request
+     * @param Country $country
+     * @return JsonResponse
+     * @throws AuthorizationException
      */
     public function update(Request $request, Country $country)
     {
@@ -104,9 +107,9 @@ class CountryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\Models\Country $country
-     * @return \Illuminate\Http\JsonResponse
-     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @param Country $country
+     * @return JsonResponse
+     * @throws AuthorizationException
      */
     public function destroy(Request $request, Country $country)
     {
