@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 class Occupation extends Model
 {
@@ -16,10 +18,30 @@ class Occupation extends Model
         'occupation'
     ];
 
+    /**
+     * @var array
+     */
+    protected $rules = [
+        'required|string'
+    ];
+
+    /**
+     * @return array
+     */
+    public function getrules(){
+        return $this->rules;
+    }
+
+    /**
+     * @return MorphOne
+     */
     public function picture(){
         return $this->morphOne('Image', 'imageable');
     }
 
+    /**
+     * @return HasMany
+     */
     public function users(){
         return $this->hasMany(User::class);
     }

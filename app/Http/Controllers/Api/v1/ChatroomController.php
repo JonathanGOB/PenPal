@@ -7,6 +7,7 @@ use App\Models\Chatroom;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Schema;
 
 class ChatroomController extends Controller
 {
@@ -29,9 +30,14 @@ class ChatroomController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        $this->authorizeForUser($request->user('api'),'create', Chatroom::class);
+        $chatroom = new Chatroom();
+        $filleables = $chatroom->getFillable();
+        $rules = $chatroom->getrules();
+        $return_array = array_map(null, $filleables, $rules);
+        return response()->json(['schema' => 'chatrooms', 'columns' => $return_array]);
     }
 
     /**

@@ -33,7 +33,11 @@ class NationalityController extends Controller
     public function create(Request $request)
     {
         $this->authorizeForUser($request->user('api'),'create', Nationality::class);
-        return response()->json(['schema' => 'nationalities', 'column' => 'nationality']);
+        $nationality = new Nationality();
+        $fillables = $nationality->getFillable();
+        $rules = $nationality->getrules();
+        $return_array = array_map(null, $fillables, $rules);
+        return response()->json(['schema' => 'nationalities', 'column' => $return_array]);
     }
 
     /**
@@ -50,7 +54,7 @@ class NationalityController extends Controller
             'nationality' => 'required'
         ]);
 
-        $nationality = new Country([
+        $nationality = new Nationality([
             'nationality' => $request->nationality
         ]);
 
@@ -82,8 +86,10 @@ class NationalityController extends Controller
     public function edit(Request $request, Nationality $nationality)
     {
         $this->authorizeForUser($request->user('api'),'create', Nationality::class);
-        $columns = Schema::getColumnListing('nationalities');
-        return response()->json(['schema' => 'nationalities', 'column' => $columns]);
+        $fillables = $nationality->getFillable();
+        $rules = $nationality->getrules();
+        $return_array = array_map(null, $fillables, $rules);
+        return response()->json(['schema' => 'nationalities', "nationality" => $nationality, 'column' => $return_array]);
     }
 
     /**
@@ -96,9 +102,9 @@ class NationalityController extends Controller
      */
     public function update(Request $request, Nationality $nationality)
     {
-        $this->authorizeForUser($request->user('api'),'update', Country::class);
+        $this->authorizeForUser($request->user('api'),'update', Nationality::class);
         $request->validate([
-            'occupation' => 'required'
+            'nationality' => 'required'
         ]);
 
         $nationality->nationality = $request->nationality;

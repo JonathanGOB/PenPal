@@ -24,6 +24,8 @@ Route::resource('v1/users', 'Api\v1\UserController', ['except' => ['create', 'st
 Route::resource('v1/tags', 'Api\v1\TagController')->middleware('auth:api');
 Route::resource('v1/occupations', 'Api\v1\OccupationController')->middleware('auth:api');
 Route::resource('v1/countries', 'Api\v1\CountryController')->middleware('auth:api');
+Route::resource('v1/nationalities', 'Api\v1\NationalityController')->middleware('auth:api');
+Route::resource('v1/chatrooms', 'Api\v1\ChatroomController')->middleware('auth:api');
 
 Route::post('v1/auth/create', 'PasswordResetController@create')->middleware('auth:api');
 Route::get('v1/auth/find/{token}', 'PasswordResetController@find')->middleware('auth:api');

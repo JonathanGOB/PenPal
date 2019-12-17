@@ -15,6 +15,17 @@ class Chatroom extends Model
         'chatroom_id', 'joinchat', 'private', 'owner_id', 'allow_people_id', 'roles'
     ];
 
+    /**
+     * @var array
+     */
+    protected $rules = [
+      '', '', 'required|integer', 'required|integer', 'required|string|json', ''
+    ];
+
+    public function getrules(){
+        return $this->rules;
+    }
+
     public function grouppicture(){
         return $this->morphOne('Image', 'imageable');
     }

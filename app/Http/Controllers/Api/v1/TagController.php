@@ -4,14 +4,16 @@ namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
 use App\Models\Tag;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\Access\Gate;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class TagController extends Controller
 {
     /**
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function index(){
         $tags = Tag::all();
@@ -20,18 +22,22 @@ class TagController extends Controller
 
     /**
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @return JsonResponse
+     * @throws AuthorizationException
      */
     public function create(Request $request){
         $this->authorizeForUser($request->user('api'),'create', Tag::class);
-        return response()->json(['schema' => 'tags', 'columns' => ['tag']], 200);
+        $tag = new Tag();
+        $filleable = $tag->getFillable();
+        $rules = $tag->getrules();
+        $return_array = array_map(null, $filleable, $rules);
+        return response()->json(['schema' => 'tags', 'columns' => $return_array], 200);
     }
 
     /**
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @return JsonResponse
+     * @throws AuthorizationException
      */
     public function store(Request $request){
         $this->authorizeForUser($request->user('api'),'store', Tag::class);
@@ -50,7 +56,7 @@ class TagController extends Controller
 
     /**
      * @param Tag $tag
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function show(Tag $tag){
         return response()->json(['user' => $tag]);
@@ -59,20 +65,22 @@ class TagController extends Controller
     /**
      * @param Request $request
      * @param Tag $tag
-     * @return \Illuminate\Http\JsonResponse
-     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @return JsonResponse
+     * @throws AuthorizationException
      */
     public function edit(Request $request, Tag $tag){
         $this->authorizeForUser($request->user('api'),'create', Tag::class);
-        $columns = Schema::getColumnListing('tags');
-        return response()->json(['schema' => 'tags', 'columns' => $columns], 200);
+        $filleable = $tag->getFillable();
+        $rules = $tag->getrules();
+        $return_array = array_map(null, $filleable, $rules);
+        return response()->json(['schema' => 'tags', "tag" => $tag, 'columns' => $return_array], 200);
     }
 
     /**
      * @param Request $request
      * @param Tag $tag
-     * @return \Illuminate\Http\JsonResponse
-     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @return JsonResponse
+     * @throws AuthorizationException
      */
     public function update(Request $request, Tag $tag){
         $this->authorizeForUser($request->user('api'),'update', Tag::class);
@@ -89,8 +97,8 @@ class TagController extends Controller
     /**
      * @param Request $request
      * @param Tag $tag
-     * @return \Illuminate\Http\JsonResponse
-     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @return JsonResponse
+     * @throws AuthorizationException
      */
     public function delete(Request $request, Tag $tag){
         $this->authorizeForUser($request->user('api'),'delete', Tag::class);

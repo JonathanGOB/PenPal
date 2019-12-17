@@ -19,6 +19,20 @@ class Tag extends Model
     ];
 
     /**
+     * @var array
+     */
+    protected $rules = [
+        'required|string'
+    ];
+
+    /**
+     * @return array
+     */
+    public function getrules(){
+        return $this->rules;
+    }
+
+    /**
      * @return MorphOne
      */
     public function picture(){

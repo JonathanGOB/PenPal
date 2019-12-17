@@ -32,7 +32,11 @@ class OccupationController extends Controller
     public function create(Request $request)
     {
         $this->authorizeForUser($request->user('api'),'create', Occupation::class);
-        return response()->json(['schema' => 'occupations', 'columns' => ['occupation']], 200);
+        $occupation = new Occupation();
+        $fillables = $occupation->getFillable();
+        $rules = $occupation->getrules();
+        $return_array = array_map(null, $fillables, $rules);
+        return response()->json(['schema' => 'occupations', 'columns' => $return_array], 200);
     }
 
     /**
@@ -80,8 +84,10 @@ class OccupationController extends Controller
     public function edit(Request $request, Occupation $occupation)
     {
         $this->authorizeForUser($request->user('api'),'create', Occupation::class);
-        $columns = Schema::getColumnListing('occupations');
-        return response()->json(['schema' => 'occupations', 'columns' => $columns], 200);
+        $fillables = $occupation->getFillable();
+        $rules = $occupation->getrules();
+        $return_array = array_map(null, $fillables, $rules);
+        return response()->json(['schema' => 'occupations', "occupation" => $occupation, 'columns' => $return_array], 200);
     }
 
     /**

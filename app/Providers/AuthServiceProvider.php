@@ -2,10 +2,12 @@
 
 namespace App\Providers;
 
+use App\Models\Chatroom;
 use App\Models\Country;
 use App\Models\Nationality;
 use App\Models\Occupation;
 use App\Models\Tag;
+use App\Policies\ChatroomPolicy;
 use App\Policies\CountryPolicy;
 use App\Policies\NationalityPolicy;
 use App\Policies\OccupationPolicy;
@@ -26,7 +28,8 @@ class AuthServiceProvider extends ServiceProvider
          Tag::class => TagPolicy::class,
          Occupation::class => OccupationPolicy::class,
          Country::class => CountryPolicy::class,
-         Nationality::class => NationalityPolicy::class
+         Nationality::class => NationalityPolicy::class,
+         Chatroom::class => ChatroomPolicy::class
     ];
 
     /**

@@ -17,6 +17,20 @@ class Country extends Model
     ];
 
     /**
+     * @var array
+     */
+    protected $rules = [
+        "required|string"
+    ];
+
+    /**
+     * @return array
+     */
+    public function getrules(){
+        return $this->rules;
+    }
+
+    /**
      * @return HasMany
      */
     public function users(){

@@ -32,7 +32,11 @@ class CountryController extends Controller
     public function create(Request $request)
     {
         $this->authorizeForUser($request->user('api'),'create', Country::class);
-        return response()->json(['schema' => 'countries', 'columns' => ['country']], 200);
+        $country = new Country();
+        $fillables = $country->getFillable();
+        $rules = $country->getrules();
+        $return_array = array_map(null, $fillables, $rules);
+        return response()->json(['schema' => 'countries', 'columns' => $return_array], 200);
     }
 
     /**
@@ -79,8 +83,10 @@ class CountryController extends Controller
     public function edit(Request $request, Country $country)
     {
         $this->authorizeForUser($request->user('api'),'create', Country::class);
-        $columns = Schema::getColumnListing('countries');
-        return response()->json(['schema' => 'countries', 'columns' => $columns], 200);
+        $fillables = $country->getFillable();
+        $rules = $country->getrules();
+        $return_array = array_map(null, $fillables, $rules);
+        return response()->json(['schema' => 'countries', "country" => $country, 'columns' => $return_array], 200);
     }
 
     /**
@@ -95,7 +101,7 @@ class CountryController extends Controller
     {
         $this->authorizeForUser($request->user('api'),'update', Country::class);
         $request->validate([
-            'occupation' => 'required'
+            'country' => 'required'
         ]);
 
         $country->country = $request->country;
@@ -117,6 +123,6 @@ class CountryController extends Controller
 
         $country->delete();
 
-        return response()->json(['message' => 'occupation.delete_success', 'occupation' => $country, 200]);
+        return response()->json(['message' => 'country.delete_success', 'occupation' => $country, 200]);
     }
 }
