@@ -15,7 +15,6 @@ class CreateEventsTable extends Migration
     {
         Schema::create('events', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('seen');
             $table->string('type');
             $table->morphs('eventable');
             $table->morphs('observable');

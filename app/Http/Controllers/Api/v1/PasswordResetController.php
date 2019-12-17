@@ -51,7 +51,7 @@ class PasswordResetController extends Controller
             );
         return response()->json([
             'message' => 'We have e-mailed your password reset link!'
-        ]);
+        ], 201);
     }
     /**
      * Find token password reset
@@ -74,7 +74,7 @@ class PasswordResetController extends Controller
                 'message' => 'This password reset token is invalid.'
             ], 404);
         }
-        return response()->json($passwordReset);
+        return response()->json(['passwordreset' => $passwordReset], 200);
     }
      /**
      * Reset password
@@ -110,6 +110,6 @@ class PasswordResetController extends Controller
         $user->save();
         $passwordReset->delete();
         $user->notify(new PasswordResetSuccess($passwordReset));
-        return response()->json($user);
+        return response()->json(['user' => $user], 200);
     }
 }

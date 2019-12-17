@@ -19,7 +19,7 @@ class OccupationController extends Controller
     public function index()
     {
         $occupations = Occupation::all();
-        return response()->json(["occupations" => $occupations], 201);
+        return response()->json(["occupations" => $occupations], 200);
     }
 
     /**

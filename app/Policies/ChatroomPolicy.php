@@ -31,7 +31,7 @@ class ChatroomPolicy
      */
     public function view(User $user, Chatroom $chatroom)
     {
-        return $user->id === $chatroom->id || $user->role;
+        return $user->id === $chatroom->owner_id || $user->role || array_key_exists($user->id, json_decode($chatroom->allow_people_id));
     }
 
     /**
@@ -54,7 +54,7 @@ class ChatroomPolicy
      */
     public function update(User $user, Chatroom $chatroom)
     {
-        return $user->id === $chatroom->id || $user->role;
+        return $user->id === $chatroom->owner_id || $user->role || json_decode($chatroom->roles)[$user->id] === "admin";
     }
 
     /**
@@ -66,7 +66,7 @@ class ChatroomPolicy
      */
     public function delete(User $user, Chatroom $chatroom)
     {
-        return $user->id === $chatroom->id || $user->role;
+        return $user->id === $chatroom->owner_id || $user->role || json_decode($chatroom->roles)[$user->id] === "admin";
     }
 
     /**
@@ -78,7 +78,7 @@ class ChatroomPolicy
      */
     public function restore(User $user, Chatroom $chatroom)
     {
-        //
+        return $user->id === $chatroom->owner_id || $user->role || json_decode($chatroom->roles)[$user->id] === "admin";
     }
 
     /**
@@ -90,6 +90,6 @@ class ChatroomPolicy
      */
     public function forceDelete(User $user, Chatroom $chatroom)
     {
-        return $user->id === $chatroom->id || $user->role;
+        return $user->id === $chatroom->owner_id || $user->role || json_decode($chatroom->roles)[$user->id] === "admin";
     }
 }

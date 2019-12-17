@@ -37,7 +37,7 @@ class NationalityController extends Controller
         $fillables = $nationality->getFillable();
         $rules = $nationality->getrules();
         $return_array = array_map(null, $fillables, $rules);
-        return response()->json(['schema' => 'nationalities', 'column' => $return_array]);
+        return response()->json(['schema' => 'nationalities', 'column' => $return_array], 200);
     }
 
     /**
@@ -72,8 +72,7 @@ class NationalityController extends Controller
      */
     public function show(Nationality $nationality)
     {
-        return response()->json(['nationality' => $nationality]);
-
+        return response()->json(['nationality' => $nationality], 200);
     }
 
     /**
@@ -89,7 +88,7 @@ class NationalityController extends Controller
         $fillables = $nationality->getFillable();
         $rules = $nationality->getrules();
         $return_array = array_map(null, $fillables, $rules);
-        return response()->json(['schema' => 'nationalities', "nationality" => $nationality, 'column' => $return_array]);
+        return response()->json(['schema' => 'nationalities', "nationality" => $nationality, 'column' => $return_array], 200);
     }
 
     /**
@@ -117,7 +116,7 @@ class NationalityController extends Controller
      * Remove the specified resource from storage.
      *
      * @param Nationality $nationality
-     * @return Response
+     * @return JsonResponse
      * @throws AuthorizationException
      */
     public function destroy(Request $request, Nationality $nationality)
@@ -126,6 +125,6 @@ class NationalityController extends Controller
 
         $nationality->delete();
 
-        return response()->json(['message' => 'nationality.delete_success', 'nationality' => $nationality, 200]);
+        return response()->json(['message' => 'nationality.delete_success', 'nationality' => $nationality], 200);
     }
 }

@@ -59,7 +59,7 @@ class TagController extends Controller
      * @return JsonResponse
      */
     public function show(Tag $tag){
-        return response()->json(['user' => $tag]);
+        return response()->json(['user' => $tag], 200);
     }
 
     /**

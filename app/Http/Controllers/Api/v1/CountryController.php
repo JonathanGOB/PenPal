@@ -20,7 +20,7 @@ class CountryController extends Controller
     public function index()
     {
         $countries = Country::all();
-        return response()->json(['countries' => $countries], 201);
+        return response()->json(['countries' => $countries], 200);
     }
 
     /**
@@ -123,6 +123,6 @@ class CountryController extends Controller
 
         $country->delete();
 
-        return response()->json(['message' => 'country.delete_success', 'occupation' => $country, 200]);
+        return response()->json(['message' => 'country.delete_success', 'occupation' => $country], 200);
     }
 }

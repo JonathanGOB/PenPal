@@ -54,7 +54,7 @@ class AuthController extends Controller
         $user->active = true;
         $user->activation_token = '';
         $user->save();
-        return $user;
+        return response()->json(['user' => $user], 200);
     }
 
     /**
@@ -95,7 +95,7 @@ class AuthController extends Controller
             'expires_at' => Carbon::parse(
                 $tokenResult->token->expires_at
             )->toDateTimeString()
-        ]);
+        ], 201);
 
     }
 
@@ -108,7 +108,7 @@ class AuthController extends Controller
         $request->user()->token()->revoke();
         return response()->json([
             'message' => __('auth.logout_success')
-        ]);
+        ], 200);
     }
 
 
@@ -118,6 +118,6 @@ class AuthController extends Controller
      */
     public function user(Request $request)
     {
-        return response()->json($request->user());
+        return response()->json([$request->user()], 200);
     }
 }

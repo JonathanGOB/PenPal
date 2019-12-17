@@ -15,7 +15,7 @@ class UserController extends Controller
         $users = User::simplePaginate(10)->each((function($row){
             $row->setHidden(['email', 'email_verified_at', 'role', 'password', 'remember_token']);
         }));
-        return response()->json(['users' => $users]);
+        return response()->json(['users' => $users], 200);
     }
 
     /**
@@ -25,7 +25,7 @@ class UserController extends Controller
     public function show($userId){
         $user = User::where('id', $userId)->first();
         $user = $user->makeHidden(['email', 'email_verified_at', 'role', 'password', 'remember_token']);
-        return response()->json(['user' => $user]);
+        return response()->json(['user' => $user], 200);
     }
 
     public function edit(Request $request, User $user){

@@ -23,13 +23,13 @@ class ChatroomController extends Controller
     {
         $this->authorizeForUser($request->user('api'),'viewAny', Chatroom::class);
         $chatrooms = Chatroom::all();
-        return response()->json(['chatrooms' => $chatrooms]);
+        return response()->json(['chatrooms' => $chatrooms], 200);
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return Response
+     * @return JsonResponse
      * @throws AuthorizationException
      */
     public function create(Request $request)
@@ -39,7 +39,7 @@ class ChatroomController extends Controller
         $filleables = $chatroom->getFillable();
         $rules = $chatroom->getrules();
         $return_array = array_map(null, $filleables, $rules);
-        return response()->json(['schema' => 'chatrooms', 'columns' => $return_array]);
+        return response()->json(['schema' => 'chatrooms', 'columns' => $return_array], 200);
     }
 
     /**
@@ -74,14 +74,13 @@ class ChatroomController extends Controller
         ]);
 
         $chatroom->save();
-        return response()->json(['message' => 'succes', 'chatroom' => $chatroom], 200);
+        return response()->json(['message' => 'chatroom.creation_succes', 'chatroom' => $chatroom], 201);
     }
 
     public function getNewJoinchat(){
         while(true){
             $joinchat = str_random(60);
-            $chat = Chatroom::where('joinchat', '=', $joinchat);
-            if ($chat == null){
+            if (Chatroom::where('joinchat', '=', $joinchat)->exists()){
                 return $joinchat;
             }
         }
@@ -90,30 +89,38 @@ class ChatroomController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Chatroom  $chatroom
-     * @return Response
+     * @param Request $request
+     * @param Chatroom $chatroom
+     * @return JsonResponse
+     * @throws AuthorizationException
      */
-    public function show(Chatroom $chatroom)
+    public function show(Request $request, Chatroom $chatroom)
     {
-        //
+        $this->authorizeForUser($request->user('api'),'view', Chatroom::class);
+        return response()->json(['chatroom', $chatroom], 200);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Chatroom  $chatroom
-     * @return Response
+     * @param Chatroom $chatroom
+     * @return JsonResponse
+     * @throws AuthorizationException
      */
-    public function edit(Chatroom $chatroom)
+    public function edit(Request $request, Chatroom $chatroom)
     {
-        //
+        $this->authorizeForUser($request->user('api'),'update', Chatroom::class);
+        $fillables = $chatroom->getFillable();
+        $rules = $chatroom->getrules();
+        $return_array = array_map(null, $fillables, $rules);
+        return response()->json(['schema'=>'chatrooms', 'chatroom' => $chatroom, 'columns' => $return_array], 200);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param Request $request
-     * @param  \App\Models\Chatroom  $chatroom
+     * @param Chatroom $chatroom
      * @return Response
      */
     public function update(Request $request, Chatroom $chatroom)
@@ -124,7 +131,7 @@ class ChatroomController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Chatroom  $chatroom
+     * @param Chatroom $chatroom
      * @return Response
      */
     public function destroy(Chatroom $chatroom)

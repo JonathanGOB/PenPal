@@ -15,6 +15,7 @@ class CreateChatroomsTable extends Migration
     {
         Schema::create('chatrooms', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('joinchat');
             $table->unique('joinchat')->index();
             $table->integer('private');
             $table->unsignedBigInteger('owner_id');
