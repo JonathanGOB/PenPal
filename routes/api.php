@@ -20,7 +20,7 @@ Route::get('/v1/auth/signup/activate/{token}', 'Api\v1\AuthController@signupActi
 
 Route::get('v1/auth/logout', 'Api\v1\AuthController@logout')->middleware('auth:api');
 Route::get('v1/auth/user', 'Api\v1\AuthController@user')->middleware('auth:api');
-Route::resource('v1/users', 'Api\v1\UserController', ['except' => ['create', 'store', 'edit', 'update', 'destroy']])->middleware('auth:api');
+Route::resource('v1/users', 'Api\v1\UserController', ['except' => ['create', 'store']])->middleware('auth:api');
 Route::resource('v1/tags', 'Api\v1\TagController')->middleware('auth:api');
 Route::resource('v1/occupations', 'Api\v1\OccupationController')->middleware('auth:api');
 Route::resource('v1/countries', 'Api\v1\CountryController')->middleware('auth:api');

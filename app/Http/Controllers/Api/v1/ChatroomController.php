@@ -7,6 +7,7 @@ use App\Models\Chatroom;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Schema;
 
 class ChatroomController extends Controller
@@ -28,7 +29,8 @@ class ChatroomController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
+     * @throws AuthorizationException
      */
     public function create(Request $request)
     {
@@ -43,19 +45,53 @@ class ChatroomController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return JsonResponse
+     * @throws AuthorizationException
      */
     public function store(Request $request)
     {
-        //
+        $this->authorizeForUser($request->user('api'),'create', Chatroom::class);
+        $request->validate([
+            'private' => 'required|integer',
+            'allow_people_id' => 'required|json',
+        ]);
+
+        $roles = array($request->owner_id => "admin") ;
+        $invited = json_decode($request->allow_people_id);
+        for($i = 0; $i < count($invited); $i++){
+            $roles[$invited[$i]] = "normal";
+        }
+
+        $roles = json_encode($roles);
+
+        $chatroom = new Chatroom([
+            'joinchat' => $this->getNewJoinchat(),
+            'private' => $request->private,
+            'owner_id' => $request->user(),
+            'allow_people_id' => $request->allow_people_id,
+            'roles' => $roles
+        ]);
+
+        $chatroom->save();
+        return response()->json(['message' => 'succes', 'chatroom' => $chatroom], 200);
+    }
+
+    public function getNewJoinchat(){
+        while(true){
+            $joinchat = str_random(60);
+            $chat = Chatroom::where('joinchat', '=', $joinchat);
+            if ($chat == null){
+                return $joinchat;
+            }
+        }
     }
 
     /**
      * Display the specified resource.
      *
      * @param  \App\Models\Chatroom  $chatroom
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function show(Chatroom $chatroom)
     {
@@ -66,7 +102,7 @@ class ChatroomController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  \App\Models\Chatroom  $chatroom
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function edit(Chatroom $chatroom)
     {
@@ -76,9 +112,9 @@ class ChatroomController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @param  \App\Models\Chatroom  $chatroom
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function update(Request $request, Chatroom $chatroom)
     {
@@ -89,7 +125,7 @@ class ChatroomController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Chatroom  $chatroom
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function destroy(Chatroom $chatroom)
     {

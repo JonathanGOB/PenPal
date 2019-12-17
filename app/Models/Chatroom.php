@@ -12,14 +12,22 @@ class Chatroom extends Model
      * @var array
      */
     protected $fillable = [
-        'chatroom_id', 'joinchat', 'private', 'owner_id', 'allow_people_id', 'roles'
+        'joinchat', 'private', 'owner_id', 'allow_people_id', 'roles', 'description'
     ];
+
 
     /**
      * @var array
      */
     protected $rules = [
-      '', '', 'required|integer', 'required|integer', 'required|string|json', ''
+      'automatic', 'required|integer', 'required|integer', 'required|string|json', 'required|string|json', 'required|string'
+    ];
+
+    /**
+     * @var array
+     */
+    protected $casts = [
+        'private' => 'boolean'
     ];
 
     public function getrules(){
